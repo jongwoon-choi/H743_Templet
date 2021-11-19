@@ -22,6 +22,7 @@ OBJCOPY_BIN :=
 SUBDIRS := \
 Core/Src \
 Core/Startup \
+Drivers/BSP/ST7735 \
 Drivers/STM32H7xx_HAL_Driver/Src \
 Middlewares/ST/STM32_USB_Device_Library/Class/MSC/Src \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src \

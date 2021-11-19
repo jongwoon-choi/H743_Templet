@@ -33,7 +33,9 @@ void MX_RTC_Init(void)
   /* USER CODE BEGIN RTC_Init 0 */
 
   /* USER CODE END RTC_Init 0 */
-
+	 RTC_TimeTypeDef sTime = {0};
+	  RTC_DateTypeDef sDate = {0};
+	  RTC_AlarmTypeDef sAlarm = {0};
   /* USER CODE BEGIN RTC_Init 1 */
 
   /* USER CODE END RTC_Init 1 */
@@ -51,8 +53,27 @@ void MX_RTC_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN RTC_Init 2 */
 
+  /* USER CODE BEGIN RTC_Init 2 */
+  /** Initialize RTC and set the Time and Date
+    */
+    sTime.Hours = 0x14;
+    sTime.Minutes = 0x10;
+    sTime.Seconds = 0x0;
+    sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+    sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+    if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
+    {
+      Error_Handler();
+    }
+    sDate.WeekDay = RTC_WEEKDAY_FRIDAY;
+    sDate.Month = RTC_MONTH_NOVEMBER;
+    sDate.Date = 0x19;
+    sDate.Year = 0x21;
+    if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
+    {
+      Error_Handler();
+    }
   /* USER CODE END RTC_Init 2 */
 
 }

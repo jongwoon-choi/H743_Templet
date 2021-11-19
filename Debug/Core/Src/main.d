@@ -48,7 +48,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/spi.h ../Core/Inc/tim.h ../Core/Inc/usart.h \
  ../USB_DEVICE/App/usb_device.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
- ../USB_DEVICE/Target/usbd_conf.h ../Core/Inc/gpio.h
+ ../USB_DEVICE/Target/usbd_conf.h ../Core/Inc/gpio.h \
+ ../Drivers/BSP/ST7735/lcd.h ../Drivers/BSP/ST7735/st7735.h \
+ ../Drivers/BSP/ST7735/st7735_reg.h
 
 ../Core/Inc/main.h:
 
@@ -163,3 +165,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../USB_DEVICE/Target/usbd_conf.h:
 
 ../Core/Inc/gpio.h:
+
+../Drivers/BSP/ST7735/lcd.h:
+
+../Drivers/BSP/ST7735/st7735.h:
+
+../Drivers/BSP/ST7735/st7735_reg.h:

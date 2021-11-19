@@ -30,7 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,6 +62,37 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void CPU_CACHE_Enable(void)
+{
+  /* Enable I-Cache */
+  SCB_EnableICache();
+
+  /* Enable D-Cache */
+  SCB_EnableDCache();
+}
+
+static void LED_Blink(uint32_t Hdelay,uint32_t Ldelay)
+{
+	HAL_GPIO_WritePin(KEY_GPIO_Port,KEY_Pin,GPIO_PIN_SET);
+	HAL_Delay(Hdelay - 1);
+	HAL_GPIO_WritePin(KEY_GPIO_Port,KEY_Pin,GPIO_PIN_RESET);
+	HAL_Delay(Ldelay-1);
+}
+
+/**
+  * @brief  Get the current time and date.
+  * @param
+  * @retval None
+  */
+static void RTC_CalendarShow(RTC_DateTypeDef *sdatestructureget,RTC_TimeTypeDef *stimestructureget)
+{
+  /* ?��?��?��?��?��?��谿珂?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��??? ?��?��?��?��?��?��?��?��?��?��?��?��?��?��RTC?��?��?��?��?��?��?��?�� */
+  /* Both time and date must be obtained or RTC cannot be read next time */
+  /* Get the RTC current Time */
+  HAL_RTC_GetTime(&hrtc, stimestructureget, RTC_FORMAT_BIN);
+  /* Get the RTC current Date */
+  HAL_RTC_GetDate(&hrtc, sdatestructureget, RTC_FORMAT_BIN);
+}
 
 /* USER CODE END 0 */
 
@@ -72,6 +103,12 @@ void PeriphCommonClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+
+#ifdef W25Qxx
+  SCB->VTOR = QSPI_BASE;
+#endif
+//MPU_Config();
+//CPU_CACHE_Enable();
 
   /* USER CODE END 1 */
 
@@ -109,7 +146,11 @@ int main(void)
   MX_DAC1_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+	uint8_t text[20];
+	RTC_DateTypeDef sdatestructureget ;
+	RTC_TimeTypeDef stimestructureget ;
 
+	LCD_Test();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -119,6 +160,21 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+			RTC_CalendarShow(&sdatestructureget,&stimestructureget);
+
+	//		if (stimestructureget.Seconds % 2 == 1)
+	//			sprintf((char *)&text,"Time %02d:%02d:%02d",stimestructureget.Hours, stimestructureget.Minutes,stimestructureget.Seconds);
+	//		else
+				sprintf((char *)&text,"Time %02d:%02d:%02d",stimestructureget.Hours, stimestructureget.Minutes,stimestructureget.Seconds);
+			LCD_ShowString(4, 58, 160, 16, 16, text);
+
+				sprintf((char *)&text, "Date 20%02d-%02d-%02d ",sdatestructureget.Year,sdatestructureget.Month, sdatestructureget.Date);
+			LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
+
+			sprintf((char *)&text,"Tick: %d ms",HAL_GetTick());
+			LCD_ShowString(4, 74, 160, 16, 16,text);
+
+			LED_Blink(3,500);
   }
   /* USER CODE END 3 */
 }
